@@ -34,8 +34,7 @@
     <div class="flex min-h-screen">
         <aside class="hidden w-72 flex-col bg-slate-900 px-6 py-8 text-slate-200 lg:flex">
             <div class="mb-10">
-                <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-400">Kaswarga</p>
-                <h1 class="mt-3 text-2xl font-bold text-white">Manajemen Kepala Keluarga</h1>
+                <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-100">Kaswarga</p>
                 <p class="mt-2 text-sm text-slate-400">Kelola data kepala keluarga secara cepat dari satu dashboard.</p>
             </div>
 
@@ -47,7 +46,6 @@
                 <div
                     class="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
                     <div>
-                        <p class="text-sm text-slate-500">Dashboard CRUD</p>
                         <h2 class="text-2xl font-bold text-slate-900">Data Kepala Keluarga</h2>
                     </div>
 

@@ -34,8 +34,7 @@
     <div class="flex min-h-screen">
         <aside class="hidden w-72 flex-col bg-slate-900 px-6 py-8 text-slate-200 lg:flex">
             <div class="mb-10">
-                <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-400">Kaswarga</p>
-                <h1 class="mt-3 text-2xl font-bold text-white">Dashboard</h1>
+                <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-100">Kaswarga</p>
                 <p class="mt-2 text-sm text-slate-400">Pantau informasi penting kepala keluarga dan pengumuman terbaru.
                 </p>
             </div>
@@ -48,15 +47,10 @@
                 <div
                     class="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
                     <div>
-                        <p class="text-sm text-slate-500">Halaman Utama</p>
                         <h2 class="text-2xl font-bold text-slate-900">{{ $greeting }}, Admin</h2>
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <a href="{{ route('kepala-keluarga.index') }}"
-                            class="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
-                            Kelola KK
-                        </a>
                         <button
                             class="flex items-center gap-3 rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">
                             <span
