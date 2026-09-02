@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+        @apply bg-[#f7f7f7] text-[#111111];
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+    }
+}
+
+@layer components {
+    .form-control {
+        @apply w-full rounded-sm border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm text-[#111111] outline-none transition focus:border-black focus:ring-1 focus:ring-black;
+    }
+
+    .form-label {
+        @apply mb-2 block text-sm font-medium text-[#111111];
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-sm bg-black px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#333333] focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-sm border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#111111] transition hover:bg-[#f5f5f5] focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+    }
+
+    .panel {
+        @apply border border-[#e5e5e5] bg-white;
+    }
+}
