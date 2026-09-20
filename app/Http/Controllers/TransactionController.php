@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Warga;
+use App\Services\TransactionAnomalyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -122,7 +123,9 @@ class TransactionController extends Controller
             'transaction_date' => ['required', 'date'],
         ]);
 
-        Transaction::create($validated);
+        $transaction = Transaction::create($validated);
+
+        (new TransactionAnomalyService())->analyze($transaction);
 
         return redirect()
             ->route('transactions.index')
@@ -144,6 +147,8 @@ class TransactionController extends Controller
         ]);
 
         $transaction->update($validated);
+
+        (new TransactionAnomalyService())->analyze($transaction);
 
         return redirect()
             ->route('transactions.index')

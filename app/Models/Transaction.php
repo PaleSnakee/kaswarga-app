@@ -16,11 +16,16 @@ class Transaction extends Model
         'category',
         'description',
         'transaction_date',
+        'anomaly_score',
+        'is_anomaly',
+        'audit_status',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'transaction_date' => 'date',
+        'anomaly_score' => 'decimal:6',
+        'is_anomaly' => 'boolean',
     ];
 
     /**

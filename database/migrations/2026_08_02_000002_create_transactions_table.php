@@ -19,6 +19,14 @@ return new class extends Migration
             $table->string('category');
             $table->text('description')->nullable();
             $table->date('transaction_date');
+            $table->decimal('anomaly_score', 10, 6)->nullable();
+            $table->boolean('is_anomaly')
+                ->default(false);
+            $table->enum('audit_status', [
+                'normal',
+                'review',
+                'verified'
+            ])->default('normal');
             $table->timestamps();
         });
     }

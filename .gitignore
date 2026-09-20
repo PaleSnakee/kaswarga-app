@@ -1,4 +1,4 @@
-/.phpunit.cache
+**Preparing raw modified file output without fences****Preparing raw modified file output without fences**/.phpunit.cache
 /node_modules
 /public/build
 /public/hot
@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+ml-service/venv/
+ml-service/__pycache__/
+ml-service/**/*.pyc
+ml-service/*.joblib

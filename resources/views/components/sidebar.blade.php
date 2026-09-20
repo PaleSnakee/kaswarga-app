@@ -39,6 +39,15 @@
             </svg>
             <span>Kelola Kas</span>
         </a>
+        <a href="{{ route('anomalies.index') }}" @click="sidebarOpen = false"
+            class="{{ request()->routeIs('anomalies.*') ? 'bg-black text-white' : 'text-[#111111] hover:bg-[#f5f5f5]' }} flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 3 19h18L12 3Z" />
+                <path stroke-linecap="round" d="M12 9v4m0 3h.01" />
+            </svg>
+            <span>Audit Anomali</span>
+        </a>
         <a href="{{ route('pengumuman.index') }}" @click="sidebarOpen = false"
             class="{{ request()->routeIs('pengumuman.*') ? 'bg-black text-white' : 'text-[#111111] hover:bg-[#f5f5f5]' }} flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium transition">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"

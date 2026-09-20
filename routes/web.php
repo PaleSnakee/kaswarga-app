@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\AnomalyController;
 use App\Http\Controllers\PengumumanController;
-use App\Http\Controllers\WargaController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WargaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,7 @@ Route::get('/transactions', [TransactionController::class, 'index'])->name('tran
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::put('/transactions/{transaction}', [TransactionController::class, 'update'])->name('transactions.update');
 Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+
+Route::get('/anomalies', [AnomalyController::class, 'index'])->name('anomalies.index');
+Route::get('/anomalies/{transaction}', [AnomalyController::class, 'show'])->name('anomalies.show');
+Route::put('/anomalies/{transaction}/audit-status', [AnomalyController::class, 'updateAuditStatus'])->name('anomalies.updateAuditStatus');

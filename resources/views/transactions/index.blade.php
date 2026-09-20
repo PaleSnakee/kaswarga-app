@@ -211,7 +211,7 @@
 
                 <div class="flex flex-wrap gap-3">
                     <button type="submit"
-                        class="rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700">
+                        class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
                         {{ $transactionEdit ? 'Update Transaksi' : 'Simpan Transaksi' }}
                     </button>
 
@@ -411,11 +411,10 @@
             placeholderOption.selected = true;
             categorySelect.appendChild(placeholderOption);
 
-            const categories = type.value === 'pemasukan' ?
-                ['Iuran Bulanan', 'Donasi', 'Denda', 'Lainnya'] :
-                type.value === 'pengeluaran' ?
-                ['Operasional', 'Kebersihan', 'Keamanan', 'Perbaikan', 'Konsumsi', 'Lainnya'] :
-                [];
+            const categories = type.value === 'pemasukan' ? ['Iuran Bulanan', 'Donasi', 'Denda', 'Lainnya'] :
+                type.value === 'pengeluaran' ? ['Operasional', 'Kebersihan', 'Keamanan', 'Perbaikan', 'Konsumsi',
+                    'Lainnya'
+                ] : [];
 
             categories.forEach((category) => {
                 const option = document.createElement('option');

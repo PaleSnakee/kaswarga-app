@@ -81,8 +81,8 @@
 
                 <div class="flex flex-wrap gap-3">
                     <button type="submit"
-                        class="rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700">
-                        {{ $kepalaKeluargaEdit ? 'Update Kepala Keluarga' : 'Simpan Kepala Keluarga' }}
+                        class="rounded-2xl bg-blue-700 text-white px-5 py-3 text-sm border-2 font-semibold transition hover:bg-blue-900">
+                        {{ $kepalaKeluargaEdit ? 'Update' : 'Simpan' }}
                     </button>
 
                     @if ($kepalaKeluargaEdit)

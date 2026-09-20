@@ -71,7 +71,7 @@
 
                 <div class="flex flex-wrap gap-3">
                     <button type="submit"
-                        class="rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700">
+                        class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
                         {{ $pengumumanEdit ? 'Update Pengumuman' : 'Simpan Pengumuman' }}
                     </button>
 

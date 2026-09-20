@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ml_service' => [
+        'url' => env('ML_SERVICE_URL'),
+        'timeout' => env('ML_SERVICE_TIMEOUT', 5),
+        'internal_token' => env('ML_SERVICE_INTERNAL_TOKEN'),
+    ],
+
 ];
