@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\VerifyMLInternalToken;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ml.internal.token' => \App\Http\Middleware\VerifyMLInternalToken::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }

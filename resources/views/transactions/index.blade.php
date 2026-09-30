@@ -110,120 +110,125 @@
 
     <div class="grid gap-6 lg:grid-cols-[340px_1fr]">
         <!-- Card Input Kas -->
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
-            <div class="mb-6">
-                <p class="text-sm font-medium text-brand-600">
-                    {{ $transactionEdit ? 'Mode Edit' : 'Input Baru' }}</p>
-                <h3 class="mt-1 text-xl font-bold text-slate-900">
-                    {{ $transactionEdit ? 'Ubah Transaksi Kas' : 'Tambah Transaksi Kas' }}
-                </h3>
-                <p class="mt-2 text-sm text-slate-500">
-                    {{ $transactionEdit ? 'Perbarui data transaksi kas yang dipilih.' : 'Masukkan data transaksi kas warga.' }}
-                </p>
-            </div>
-
-            <form
-                action="{{ $transactionEdit ? route('transactions.update', $transactionEdit) : route('transactions.store') }}"
-                method="POST" class="space-y-5" id="transactionForm">
-                @csrf
-                @if ($transactionEdit)
-                    @method('PUT')
-                @endif
-
-                <!-- Jenis Transaksi -->
-                <div>
-                    <label for="transaction_type" class="mb-2 block text-sm font-semibold text-slate-700">Jenis
-                        Transaksi</label>
-                    <select id="transaction_type" name="transaction_type" onchange="updateCategories()"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
-                        <option value="" disabled selected>Pilih Jenis Transaksi</option>
-                        <option value="pemasukan"
-                            {{ old('transaction_type', $transactionEdit->transaction_type ?? '') == 'pemasukan' ? 'selected' : '' }}>
-                            Pemasukan</option>
-                        <option value="pengeluaran"
-                            {{ old('transaction_type', $transactionEdit->transaction_type ?? '') == 'pengeluaran' ? 'selected' : '' }}>
-                            Pengeluaran</option>
-                    </select>
+        @if (!auth()->user()->hasRole('warga'))
+            <div class="rounded-3xl bg-white p-6 shadow-soft">
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-brand-600">
+                        {{ $transactionEdit ? 'Mode Edit' : 'Input Baru' }}</p>
+                    <h3 class="mt-1 text-xl font-bold text-slate-900">
+                        {{ $transactionEdit ? 'Ubah Transaksi Kas' : 'Tambah Transaksi Kas' }}
+                    </h3>
+                    <p class="mt-2 text-sm text-slate-500">
+                        {{ $transactionEdit ? 'Perbarui data transaksi kas yang dipilih.' : 'Masukkan data transaksi kas warga.' }}
+                    </p>
                 </div>
 
-                <!-- Nominal -->
-                <div>
-                    <label for="amount" class="mb-2 block text-sm font-semibold text-slate-700">Nominal</label>
-                    <input id="amount" type="number" name="amount" min="1"
-                        value="{{ old('amount', $transactionEdit->amount ?? '') }}"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
-                        placeholder="Masukkan nominal">
-                </div>
-
-                <!-- Kategori -->
-                <div>
-                    <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
-                    <select id="category" name="category"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
-                        <option value="" disabled selected>Pilih Kategori</option>
-                        @php
-                            $categories =
-                                ($transactionEdit && $transactionEdit->transaction_type == 'pemasukan') ||
-                                old('transaction_type') == 'pemasukan'
-                                    ? $categoriesPemasukan
-                                    : ($transactionEdit && $transactionEdit->transaction_type == 'pengeluaran'
-                                        ? $categoriesPengeluaran
-                                        : []);
-                            $selectedCategory = old('category', $transactionEdit->category ?? '');
-                        @endphp
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat }}" {{ $selectedCategory == $cat ? 'selected' : '' }}>
-                                {{ $cat }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Tanggal -->
-                <div>
-                    <label for="transaction_date" class="mb-2 block text-sm font-semibold text-slate-700">Tanggal</label>
-                    <input id="transaction_date" type="date" name="transaction_date"
-                        value="{{ old('transaction_date', isset($transactionEdit) ? $transactionEdit->transaction_date->format('Y-m-d') : date('Y-m-d')) }}"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
-                </div>
-
-                <!-- Nama Warga -->
-                <div>
-                    <label for="head_family_id" class="mb-2 block text-sm font-semibold text-slate-700">Nama Warga</label>
-                    <select id="head_family_id" name="head_family_id"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
-                        <option value="" disabled selected>Pilih Warga</option>
-                        @foreach ($headFamilies as $warga)
-                            <option value="{{ $warga->id }}"
-                                {{ old('head_family_id', $transactionEdit->head_family_id ?? '') == $warga->id ? 'selected' : '' }}>
-                                {{ $warga->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Keterangan -->
-                <div>
-                    <label for="description" class="mb-2 block text-sm font-semibold text-slate-700">Keterangan</label>
-                    <textarea id="description" name="description" rows="3"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
-                        placeholder="Masukkan keterangan transaksi">{{ old('description', $transactionEdit->description ?? '') }}</textarea>
-                </div>
-
-                <div class="flex flex-wrap gap-3">
-                    <button type="submit"
-                        class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
-                        {{ $transactionEdit ? 'Update Transaksi' : 'Simpan Transaksi' }}
-                    </button>
-
+                <form
+                    action="{{ $transactionEdit ? route('transactions.update', $transactionEdit) : route('transactions.store') }}"
+                    method="POST" class="space-y-5" id="transactionForm">
+                    @csrf
                     @if ($transactionEdit)
-                        <a href="{{ route('transactions.index') }}"
-                            class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
-                            Batal
-                        </a>
+                        @method('PUT')
                     @endif
-                </div>
-            </form>
-        </div>
+
+                    <!-- Jenis Transaksi -->
+                    <div>
+                        <label for="transaction_type" class="mb-2 block text-sm font-semibold text-slate-700">Jenis
+                            Transaksi</label>
+                        <select id="transaction_type" name="transaction_type" onchange="updateCategories()"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
+                            <option value="" disabled selected>Pilih Jenis Transaksi</option>
+                            <option value="pemasukan"
+                                {{ old('transaction_type', $transactionEdit->transaction_type ?? '') == 'pemasukan' ? 'selected' : '' }}>
+                                Pemasukan</option>
+                            <option value="pengeluaran"
+                                {{ old('transaction_type', $transactionEdit->transaction_type ?? '') == 'pengeluaran' ? 'selected' : '' }}>
+                                Pengeluaran</option>
+                        </select>
+                    </div>
+
+                    <!-- Nominal -->
+                    <div>
+                        <label for="amount" class="mb-2 block text-sm font-semibold text-slate-700">Nominal</label>
+                        <input id="amount" type="number" name="amount" min="1"
+                            value="{{ old('amount', $transactionEdit->amount ?? '') }}"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
+                            placeholder="Masukkan nominal">
+                    </div>
+
+                    <!-- Kategori -->
+                    <div>
+                        <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
+                        <select id="category" name="category"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
+                            <option value="" disabled selected>Pilih Kategori</option>
+                            @php
+                                $categories =
+                                    ($transactionEdit && $transactionEdit->transaction_type == 'pemasukan') ||
+                                    old('transaction_type') == 'pemasukan'
+                                        ? $categoriesPemasukan
+                                        : ($transactionEdit && $transactionEdit->transaction_type == 'pengeluaran'
+                                            ? $categoriesPengeluaran
+                                            : []);
+                                $selectedCategory = old('category', $transactionEdit->category ?? '');
+                            @endphp
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat }}" {{ $selectedCategory == $cat ? 'selected' : '' }}>
+                                    {{ $cat }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Tanggal -->
+                    <div>
+                        <label for="transaction_date"
+                            class="mb-2 block text-sm font-semibold text-slate-700">Tanggal</label>
+                        <input id="transaction_date" type="date" name="transaction_date"
+                            value="{{ old('transaction_date', isset($transactionEdit) ? $transactionEdit->transaction_date->format('Y-m-d') : date('Y-m-d')) }}"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
+                    </div>
+
+                    <!-- Nama Warga -->
+                    <div>
+                        <label for="head_family_id" class="mb-2 block text-sm font-semibold text-slate-700">Nama
+                            Warga</label>
+                        <select id="head_family_id" name="head_family_id"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100">
+                            <option value="" disabled selected>Pilih Warga</option>
+                            @foreach ($headFamilies as $warga)
+                                <option value="{{ $warga->id }}"
+                                    {{ old('head_family_id', $transactionEdit->head_family_id ?? '') == $warga->id ? 'selected' : '' }}>
+                                    {{ $warga->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Keterangan -->
+                    <div>
+                        <label for="description"
+                            class="mb-2 block text-sm font-semibold text-slate-700">Keterangan</label>
+                        <textarea id="description" name="description" rows="3"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
+                            placeholder="Masukkan keterangan transaksi">{{ old('description', $transactionEdit->description ?? '') }}</textarea>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button type="submit"
+                            class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
+                            {{ $transactionEdit ? 'Update Transaksi' : 'Simpan Transaksi' }}
+                        </button>
+
+                        @if ($transactionEdit)
+                            <a href="{{ route('transactions.index') }}"
+                                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+                                Batal
+                            </a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        @endif
 
         <!-- Card Daftar Kas -->
         <div class="rounded-3xl bg-white p-6 shadow-soft">
@@ -328,7 +333,9 @@
                             <th class="w-28 pb-3 pr-2">Kategori</th>
                             <th class="w-24 pb-3 pr-2">Nominal</th>
                             <th class="w-28 pb-3 pr-2">Status</th>
-                            <th class="w-28 pb-3 text-right">Aksi</th>
+                            @if (!auth()->user()->hasRole('warga'))
+                                <th class="w-28 pb-3 text-right">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -356,27 +363,31 @@
                                         {{ $transaction->transaction_type == 'pemasukan' ? 'Masuk' : 'Keluar' }}
                                     </span>
                                 </td>
-                                <td class="py-3 text-right">
-                                    <div class="flex justify-end gap-1.5">
-                                        <a href="{{ route('transactions.index', ['edit' => $transaction->id, 'search' => $search, 'month' => $month, 'year' => $year, 'type' => $type, 'category' => $category]) }}"
-                                            class="rounded-lg bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-700 transition hover:bg-amber-200">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('transactions.destroy', $transaction) }}" method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="rounded-lg bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
+                                @if (!auth()->user()->hasRole('warga'))
+                                    <td class="py-3 text-right">
+                                        <div class="flex justify-end gap-1.5">
+                                            <a href="{{ route('transactions.index', ['edit' => $transaction->id, 'search' => $search, 'month' => $month, 'year' => $year, 'type' => $type, 'category' => $category]) }}"
+                                                class="rounded-lg bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-700 transition hover:bg-amber-200">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('transactions.destroy', $transaction) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="rounded-lg bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-10 text-center text-sm text-slate-500">
+                                <td colspan="{{ auth()->user()->hasRole('warga') ? 6 : 7 }}"
+                                    class="py-10 text-center text-sm text-slate-500">
                                     Data transaksi belum tersedia.
                                 </td>
                             </tr>

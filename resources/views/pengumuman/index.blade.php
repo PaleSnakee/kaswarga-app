@@ -33,57 +33,60 @@
         </div>
     @endif
 
-    <div class="grid gap-6 xl:grid-cols-[380px_1fr]">
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
-            <div class="mb-6">
-                <p class="text-sm font-medium text-brand-600">
-                    {{ $pengumumanEdit ? 'Mode Edit' : 'Input Baru' }}</p>
-                <h3 class="mt-1 text-xl font-bold text-slate-900">
-                    {{ $pengumumanEdit ? 'Ubah Pengumuman' : 'Tambah Pengumuman' }}
-                </h3>
-                <p class="mt-2 text-sm text-slate-500">
-                    {{ $pengumumanEdit ? 'Perbarui pengumuman yang dipilih.' : 'Masukkan judul dan isi pengumuman untuk dashboard.' }}
-                </p>
-            </div>
-
-            <form action="{{ $pengumumanEdit ? route('pengumuman.update', $pengumumanEdit) : route('pengumuman.store') }}"
-                method="POST" class="space-y-5">
-                @csrf
-                @if ($pengumumanEdit)
-                    @method('PUT')
-                @endif
-
-                <div>
-                    <label for="judul" class="mb-2 block text-sm font-semibold text-slate-700">Judul</label>
-                    <input id="judul" type="text" name="judul"
-                        value="{{ old('judul', $pengumumanEdit->judul ?? '') }}"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
-                        placeholder="Masukkan judul pengumuman">
+    <div class="grid gap-6 {{ auth()->user()->hasRole('admin') ? 'xl:grid-cols-[380px_1fr]' : '' }}">
+        @if (auth()->user()->hasRole('admin'))
+            <div class="rounded-3xl bg-white p-6 shadow-soft">
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-brand-600">
+                        {{ $pengumumanEdit ? 'Mode Edit' : 'Input Baru' }}</p>
+                    <h3 class="mt-1 text-xl font-bold text-slate-900">
+                        {{ $pengumumanEdit ? 'Ubah Pengumuman' : 'Tambah Pengumuman' }}
+                    </h3>
+                    <p class="mt-2 text-sm text-slate-500">
+                        {{ $pengumumanEdit ? 'Perbarui pengumuman yang dipilih.' : 'Masukkan judul dan isi pengumuman untuk dashboard.' }}
+                    </p>
                 </div>
 
-                <div>
-                    <label for="isi" class="mb-2 block text-sm font-semibold text-slate-700">Isi
-                        Pengumuman</label>
-                    <textarea id="isi" name="isi" rows="6"
-                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
-                        placeholder="Masukkan isi pengumuman">{{ old('isi', $pengumumanEdit->isi ?? '') }}</textarea>
-                </div>
-
-                <div class="flex flex-wrap gap-3">
-                    <button type="submit"
-                        class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
-                        {{ $pengumumanEdit ? 'Update Pengumuman' : 'Simpan Pengumuman' }}
-                    </button>
-
+                <form
+                    action="{{ $pengumumanEdit ? route('pengumuman.update', $pengumumanEdit) : route('pengumuman.store') }}"
+                    method="POST" class="space-y-5">
+                    @csrf
                     @if ($pengumumanEdit)
-                        <a href="{{ route('pengumuman.index') }}"
-                            class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
-                            Batal
-                        </a>
+                        @method('PUT')
                     @endif
-                </div>
-            </form>
-        </div>
+
+                    <div>
+                        <label for="judul" class="mb-2 block text-sm font-semibold text-slate-700">Judul</label>
+                        <input id="judul" type="text" name="judul"
+                            value="{{ old('judul', $pengumumanEdit->judul ?? '') }}"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
+                            placeholder="Masukkan judul pengumuman">
+                    </div>
+
+                    <div>
+                        <label for="isi" class="mb-2 block text-sm font-semibold text-slate-700">Isi
+                            Pengumuman</label>
+                        <textarea id="isi" name="isi" rows="6"
+                            class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100"
+                            placeholder="Masukkan isi pengumuman">{{ old('isi', $pengumumanEdit->isi ?? '') }}</textarea>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button type="submit"
+                            class="rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900">
+                            {{ $pengumumanEdit ? 'Update Pengumuman' : 'Simpan Pengumuman' }}
+                        </button>
+
+                        @if ($pengumumanEdit)
+                            <a href="{{ route('pengumuman.index') }}"
+                                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+                                Batal
+                            </a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        @endif
 
         <div class="rounded-3xl bg-white p-6 shadow-soft">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -107,7 +110,9 @@
                             <th class="pb-4 pr-4">No</th>
                             <th class="pb-4 pr-4">Judul</th>
                             <th class="pb-4 pr-4">Isi</th>
-                            <th class="pb-4 text-right">Aksi</th>
+                            @if (auth()->user()->hasRole('admin'))
+                                <th class="pb-4 text-right">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -118,27 +123,30 @@
                                     <p class="font-semibold text-slate-900">{{ $pengumuman->judul }}</p>
                                 </td>
                                 <td class="py-4 pr-4 text-sm text-slate-600">{{ $pengumuman->isi }}</td>
-                                <td class="py-4 text-right">
-                                    <div class="flex justify-end gap-2">
-                                        <a href="{{ route('pengumuman.index', ['edit' => $pengumuman->id, 'search' => $search]) }}"
-                                            class="rounded-xl bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700 transition hover:bg-amber-200">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('pengumuman.destroy', $pengumuman) }}" method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="rounded-xl bg-rose-100 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-200">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
+                                @if (auth()->user()->hasRole('admin'))
+                                    <td class="py-4 text-right">
+                                        <div class="flex justify-end gap-2">
+                                            <a href="{{ route('pengumuman.index', ['edit' => $pengumuman->id, 'search' => $search]) }}"
+                                                class="rounded-xl bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700 transition hover:bg-amber-200">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('pengumuman.destroy', $pengumuman) }}" method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="rounded-xl bg-rose-100 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-200">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-10 text-center text-sm text-slate-500">
+                                <td colspan="{{ auth()->user()->hasRole('admin') ? 4 : 3 }}"
+                                    class="py-10 text-center text-sm text-slate-500">
                                     Pengumuman belum tersedia.
                                 </td>
                             </tr>

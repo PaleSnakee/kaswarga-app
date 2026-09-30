@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="mb-6 border-b border-[#e5e5e5] pb-5">
-        <p class="text-sm text-[#666666]">{{ $greeting }}, Admin</p>
+        <p class="text-sm text-[#666666]">{{ $greeting }}, {{ auth()->user()->name }}</p>
         <h2 class="mt-1 text-2xl font-bold text-[#111111]">Dashboard</h2>
     </div>
 
@@ -14,7 +14,7 @@
                     <p class="mt-1 text-sm text-[#666666]">Informasi untuk warga dan pengurus.</p>
                 </div>
                 <a href="{{ route('pengumuman.index') }}"
-                    class="text-sm font-medium text-[#111111] underline underline-offset-4">Kelola</a>
+                    class="text-sm font-medium text-[#111111] underline underline-offset-4">{{ auth()->user()->hasRole('admin') ? 'Kelola' : 'Lihat semua' }}</a>
             </div>
             <div class="divide-y divide-[#e5e5e5]">
                 @forelse ($pengumuman as $item)
@@ -32,7 +32,11 @@
             <p class="text-sm text-[#666666]">Jumlah Kepala Keluarga</p>
             <p class="mt-3 text-4xl font-bold tracking-tight text-[#111111]">{{ $jumlahKepalaKeluarga }}</p>
             <p class="mt-3 text-sm leading-6 text-[#666666]">Total data kepala keluarga yang tercatat dalam sistem.</p>
-            <a href="{{ route('kepala-keluarga.index') }}" class="btn-primary mt-5">Buka Data Warga</a>
+            @if (auth()->user()->hasRole('admin'))
+                <a href="{{ route('kepala-keluarga.index') }}" class="btn-primary mt-5">Buka Data Warga</a>
+            @else
+                <a href="{{ route('transactions.index') }}" class="btn-primary mt-5">Lihat Informasi Kas</a>
+            @endif
         </section>
     </div>
 @endsection
